@@ -13,6 +13,9 @@ contract SHIACrowdsale is Ownable, ReentrancyGuard {
     // The token being sold
     IERC20 private _token;
 
+    // owner of contract
+    address private _owner;
+
     // The token being sold
     IERC20 private _usdt;
 
