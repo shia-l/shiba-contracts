@@ -7,7 +7,7 @@ import "./Crowdsale.sol";
 import "./AllowanceCrowdsale.sol";
 import "./TimedCrowdsale.sol";
 
-contract ITManTokenCrowdsale is AllowanceCrowdsale, TimedCrowdsale {
+contract SHIATokenCrowdsale is AllowanceCrowdsale, TimedCrowdsale {
 	constructor(
 		uint256 _rate,
 		address payable _wallet,
