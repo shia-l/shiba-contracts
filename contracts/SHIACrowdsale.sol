@@ -158,15 +158,15 @@ contract SHIACrowdsale is Ownable, ReentrancyGuard {
      * @dev Allows an investor to purchase tokens.
      * @param beneficiary Recipient of the token purchase.
      */
-    function buyTokens(address beneficiary) public nonReentrant payable {
+    function buyTokens(address beneficiary, uint256 amount) public nonReentrant payable {
         require(beneficiary != address(0), "SHIACrowdsale: beneficiary is the zero address");
         require(_isOpen, "SHIACrowdsale: not open");
         require(block.timestamp >= _openingTime, "SHIACrowdsale: not yet open");
         require(block.timestamp <= _closingTime, "SHIACrowdsale: already closed");
-        require(msg.value >= _minInvestment, "SHIACrowdsale: investment amount is less than minimum");
-        require(msg.value <= _maxInvestment, "SHIACrowdsale: investment amount is greater than maximum");
+        require(amount >= _minInvestment, "SHIACrowdsale: investment amount is less than minimum");
+        require(amount <= _maxInvestment, "SHIACrowdsale: investment amount is greater than maximum");
 
-        uint256 usdtAmount = msg.value;
+        uint256 usdtAmount = amount;
         uint256 tokens = usdtAmount.mul(_rate);
 
         require(_token.balanceOf(address(this)) >= tokens, "SHIACrowdsale: insufficient token balance");
@@ -177,15 +177,15 @@ contract SHIACrowdsale is Ownable, ReentrancyGuard {
         _token.transfer(beneficiary, tokens);
         emit TokensPurchased(msg.sender, beneficiary, usdtAmount, tokens);
 
-        _forwardFunds();
+        _forwardFunds(amount);
     }
 
     /**
      * @dev Determines how USDT is stored/forwarded on purchases.
      */
-    function _forwardFunds() internal {
+    function _forwardFunds(uint256 amount) internal {
         require(_wallet != address(0), "SHIACrowdsale: wallet is the zero address");
-        require(_usdt.balanceOf(msg.sender) >= msg.value, "SHIACrowdsale: insufficient USDT balance");
-        require(_usdt.transferFrom(msg.sender, _wallet, msg.value), "SHIACrowdsale: failed to transfer USDT");
+        require(_usdt.balanceOf(msg.sender) >= amount, "SHIACrowdsale: insufficient USDT balance");
+        require(_usdt.transferFrom(msg.sender, _wallet, amount), "SHIACrowdsale: failed to transfer USDT");
     }
 }
