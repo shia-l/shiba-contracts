@@ -15,9 +15,12 @@ contract ITManTokenCrowdsale is AllowanceCrowdsale, TimedCrowdsale {
 		ERC20 _usdt,
 		address _tokenWallet,
 		uint256 _openingTime,
-		uint256 _closingTime
+		uint256 _closingTime,
+
+		uint256 maxInvestment,
+        uint256 minInvestment
 	)
-		Crowdsale(_rate, _wallet, _token, _usdt)
+		Crowdsale(_rate, _wallet, _token, _usdt, maxInvestment, minInvestment)
 		AllowanceCrowdsale(_tokenWallet)
 		TimedCrowdsale(_openingTime, _closingTime)
 	{}

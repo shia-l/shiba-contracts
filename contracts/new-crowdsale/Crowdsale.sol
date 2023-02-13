@@ -24,6 +24,8 @@ contract Crowdsale is Context, ReentrancyGuard {
 
 	// The token being sold
 	IERC20 private _token;
+
+	// The token used to pruchase
 	IERC20 private _usdt;
 
 	// Maximum investment per investor (in USDT)
@@ -175,6 +177,9 @@ contract Crowdsale is Context, ReentrancyGuard {
 			"Crowdsale: beneficiary is the zero address"
 		);
 		require(usdtAmount != 0, "Crowdsale: usdtAmount is 0");
+		require(usdtAmount >= _minInvestment, "SHIACrowdsale: investment amount is less than minimum");
+        require(usdtAmount <= _maxInvestment, "SHIACrowdsale: investment amount is greater than maximum");
+
 		this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
 	}
 
