@@ -4,8 +4,8 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ITManToken is ERC20, Ownable {
-	constructor() ERC20("ITManToken", "ITM") {
+contract SUSDT is ERC20, Ownable {
+	constructor() ERC20("SUSDT", "SUSDT") {
 		_mint(msg.sender, 10000000000 * 10**decimals());
 	}
 
