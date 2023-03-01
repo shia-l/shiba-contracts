@@ -14,7 +14,7 @@ import "./Crowdsale.sol";
 abstract contract AllowanceCrowdsale is Crowdsale {
 	using SafeERC20 for IERC20;
 
-	address private _tokenWallet;
+	address public _tokenWallet;
 
 	/**
 	 * @dev Constructor, takes token wallet address.
@@ -27,14 +27,7 @@ abstract contract AllowanceCrowdsale is Crowdsale {
 		);
 		_tokenWallet = tokenWallet;
 	}
-
-	/**
-	 * @return the address of the wallet that will hold the tokens.
-	 */
-	function tokenWallet() public view returns (address) {
-		return _tokenWallet;
-	}
-
+	
 	/**
 	 * @dev Checks the amount of tokens left in the allowance.
 	 * @return Amount of tokens left in the allowance
@@ -42,8 +35,8 @@ abstract contract AllowanceCrowdsale is Crowdsale {
 	function remainingTokens() public view returns (uint256) {
 		return
 			Math.min(
-				token().balanceOf(_tokenWallet),
-				token().allowance(_tokenWallet, address(this))
+				_token.balanceOf(_tokenWallet),
+				_token.allowance(_tokenWallet, address(this))
 			);
 	}
 
@@ -57,6 +50,6 @@ abstract contract AllowanceCrowdsale is Crowdsale {
 		virtual
 		override
 	{
-		token().safeTransferFrom(_tokenWallet, beneficiary, tokenAmount);
+		_token.safeTransferFrom(_tokenWallet, beneficiary, tokenAmount);
 	}
 }
