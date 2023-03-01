@@ -9,8 +9,8 @@ import "./Crowdsale.sol";
  * @dev Crowdsale accepting contributions only within a time frame.
  */
 abstract contract TimedCrowdsale is Crowdsale {
-	uint256 private _openingTime;
-	uint256 private _closingTime;
+	uint256 public _openingTime;
+	uint256 public _closingTime;
 
 	/**
 	 * Event for crowdsale extending
@@ -51,19 +51,6 @@ abstract contract TimedCrowdsale is Crowdsale {
 		_closingTime = closingTime;
 	}
 
-	/**
-	 * @return the crowdsale opening time.
-	 */
-	function openingTime() public view returns (uint256) {
-		return _openingTime;
-	}
-
-	/**
-	 * @return the crowdsale closing time.
-	 */
-	function closingTime() public view returns (uint256) {
-		return _closingTime;
-	}
 
 	/**
 	 * @return true if the crowdsale is open, false otherwise.
