@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -19,32 +20,32 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
  * the methods to add functionality. Consider using 'super' where appropriate to concatenate
  * behavior.
  */
-contract Crowdsale is Context, ReentrancyGuard {
+contract Crowdsale is Context, Ownable, ReentrancyGuard {
 	using SafeERC20 for IERC20;
 
 	// The token being sold
-	IERC20 private _token;
+	IERC20 public _token;
 
 	// The token used to pruchase
-	IERC20 private _usdt;
+	IERC20 public _usdt;
 
 	// Maximum investment per investor (in USDT)
-    uint256 private _maxInvestment;
+    uint256 public _maxInvestment;
 
     // Minimum investment per investor (in USDT)
-    uint256 private _minInvestment;
+    uint256 public _minInvestment;
 
 	// Address where funds are collected
-	address payable private _wallet;
+	address payable public _wallet;
 
 	// How many token units a buyer gets per wei.
 	// The rate is the conversion between wei and the smallest and indivisible token unit.
 	// So, if you are using a rate of 1 with a ERC20Detailed token with 3 decimals called TOK
 	// 1 wei will give you 1 unit, or 0.001 TOK.
-	uint256 private _rate;
+	uint256 public _rate;
 
 	// Amount of wei raised
-	uint256 private _weiRaised;
+	uint256 public _weiRaised;
 
 	/**
 	 * Event for token purchase logging
@@ -106,32 +107,38 @@ contract Crowdsale is Context, ReentrancyGuard {
 	// }
 
 	/**
-	 * @return the token being sold.
+	 * @dev This function updates the minimum investment
+	 * This function has a non-reentrancy guard, so it shouldn't be called by
+	 * another `nonReentrant` function.
+	 * @param newMaxInvestment new max investment required
 	 */
-	function token() public view returns (IERC20) {
-		return _token;
+	function updateMaximumInvestment(uint256 newMaxInvestment) public onlyOwner nonReentrant  {
+		// update rate
+		_maxInvestment = newMaxInvestment;
 	}
 
 	/**
-	 * @return the address where funds are collected.
+	 * @dev This function updates the minimum investment
+	 * This function has a non-reentrancy guard, so it shouldn't be called by
+	 * another `nonReentrant` function.
+	 * @param newMinInvesetment new minimum investment required
 	 */
-	function wallet() public view returns (address payable) {
-		return _wallet;
+	function updateMinimumInvestment(uint256 newMinInvesetment) public onlyOwner nonReentrant  {
+		// update rate
+		_minInvestment = newMinInvesetment;
 	}
 
 	/**
-	 * @return the number of token units a buyer gets per wei.
+	 * @dev This function chnages the rate
+	 * This function has a non-reentrancy guard, so it shouldn't be called by
+	 * another `nonReentrant` function.
+	 * @param newRate Value in usdt involved in the purchase
 	 */
-	function rate() public view returns (uint256) {
-		return _rate;
+	function updateRate(uint256 newRate) public onlyOwner nonReentrant  {
+		// update rate
+		_rate = newRate;
 	}
 
-	/**
-	 * @return the amount of wei raised.
-	 */
-	function weiRaised() public view returns (uint256) {
-		return _weiRaised;
-	}
 
 	/**
 	 * @dev low level token purchase ***DO NOT OVERRIDE***
@@ -144,13 +151,13 @@ contract Crowdsale is Context, ReentrancyGuard {
 		_preValidatePurchase(beneficiary, usdtAmount);
 
 		// calculate token amount to be created
-		uint256 tokens = _getTokenAmount(usdtAmount);
+		uint256 tokenAmount = _getTokenAmount(usdtAmount);
 
 		// update state
 		_weiRaised = _weiRaised + usdtAmount;
 
-		_processPurchase(beneficiary, tokens);
-		emit TokensPurchased(_msgSender(), beneficiary, usdtAmount, tokens);
+		_processPurchase(beneficiary, tokenAmount);
+		emit TokensPurchased(_msgSender(), beneficiary, usdtAmount, tokenAmount);
 
 		_updatePurchasingState(beneficiary, usdtAmount);
 
