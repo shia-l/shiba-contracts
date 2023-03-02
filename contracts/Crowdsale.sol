@@ -146,23 +146,24 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 	 * another `nonReentrant` function.
 	 * @param beneficiary Recipient of the token purchase
 	 * @param usdtAmount Value in usdt involved in the purchase
+	 * @param usdtAmountIn18 Value in usdt involved but in 18 decimals because USDT is 6 decimals and that fucks shit up
 	 */
-	function buyTokens(address beneficiary, uint256 usdtAmount) public nonReentrant {
-		_preValidatePurchase(beneficiary, usdtAmount);
+	function buyTokens(address beneficiary, uint256 usdtAmount, uint256 usdtAmountIn18) public nonReentrant {
+		_preValidatePurchase(beneficiary, usdtAmountIn18);
 
 		// calculate token amount to be created
-		uint256 tokenAmount = _getTokenAmount(usdtAmount);
+		uint256 tokenAmount = _getTokenAmount(usdtAmountIn18);
 
 		// update state
-		_weiRaised = _weiRaised + usdtAmount;
+		_weiRaised = _weiRaised + usdtAmountIn18;
 
 		_processPurchase(beneficiary, tokenAmount);
-		emit TokensPurchased(_msgSender(), beneficiary, usdtAmount, tokenAmount);
+		emit TokensPurchased(_msgSender(), beneficiary, usdtAmountIn18, tokenAmount);
 
-		_updatePurchasingState(beneficiary, usdtAmount);
+		_updatePurchasingState(beneficiary, usdtAmountIn18);
 
+		// only using usdt amount for forward funds
 		_forwardFunds(usdtAmount);
-		_postValidatePurchase(beneficiary, usdtAmount);
 	}
 
 	/**
@@ -188,19 +189,6 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         require(usdtAmount <= _maxInvestment, "SHIACrowdsale: investment amount is greater than maximum");
 
 		this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
-	}
-
-	/**
-	 * @dev Validation of an executed purchase. Observe state and use revert statements to undo rollback when valid
-	 * conditions are not met.
-	 * @param beneficiary Address performing the token purchase
-	 * @param usdtAmount Value in wei involved in the purchase
-	 */
-	function _postValidatePurchase(address beneficiary, uint256 usdtAmount)
-		internal
-		view
-	{
-		// solhint-disable-previous-line no-empty-blocks
 	}
 
 	/**
