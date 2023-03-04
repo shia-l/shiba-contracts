@@ -263,6 +263,6 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 		
 		require(_wallet != address(0), "SHIACrowdsale: wallet is the zero address");
         require(_usdt.balanceOf(msg.sender) >= kweiAmount, "SHIACrowdsale: insufficient USDT balance");
-        require(_usdt.transferFrom(msg.sender, _wallet, kweiAmount), "SHIACrowdsale: failed to transfer USDT");
+        SafeERC20.safeTransferFrom(_usdt, msg.sender, _wallet, kweiAmount);
 	}
 }
