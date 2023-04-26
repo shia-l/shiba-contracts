@@ -129,6 +129,17 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 	}
 
 	/**
+	 * @dev This function chnages the reciepient walet
+	 * This function has a non-reentrancy guard, so it shouldn't be called by
+	 * another `nonReentrant` function.
+	 * @param newWallet New wallet
+	 */
+	function updateWallet(address payable newWallet) public onlyOwner nonReentrant  {
+		// update rate
+		_wallet = newWallet;
+	}
+	
+	/**
 	 * @dev This function chnages the rate
 	 * This function has a non-reentrancy guard, so it shouldn't be called by
 	 * another `nonReentrant` function.
