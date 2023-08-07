@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "../VestingDeletable.sol";
 import "../VestingTransferable.sol";
 
-contract FullExample is VestingDeletable, VestingTransferable {
+contract FullVesting is VestingDeletable, VestingTransferable {
     constructor(
         string memory _name,
         address _token,

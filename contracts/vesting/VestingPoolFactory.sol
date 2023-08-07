@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./VestingExamples/FullExample.sol";
+import "./implementations/FullVesting.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract VestingPoolFactory is Ownable {
@@ -31,7 +31,7 @@ contract VestingPoolFactory is Ownable {
         uint256 _startTime,
         uint256 _vestingDuration
     ) external onlyOwner {
-        FullExample pool = new FullExample(
+        FullVesting pool = new FullVesting(
             _name,
             _token,
             _startTime,
