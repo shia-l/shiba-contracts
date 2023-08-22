@@ -5,29 +5,20 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SHIA is ERC20, Ownable {
-    bool public limited;
     uint256 public maxHoldingAmount;
     uint256 public maxTxAmount;
-    address public uniswapPair;
     mapping(address => bool) public blacklists;
 
     constructor() ERC20("SHIA", "SHIA") {
-        _mint(
-            0x475c0846A30F36e963fD067C8bAc605176e9235D,
-            10000000000 * 10 ** decimals()
-        );
+        _mint(msg.sender, 10000000000 * 10 ** decimals());
         maxTxAmount = 1000000 * 10 ** decimals();
         maxHoldingAmount = 50000000 * 10 ** decimals();
     }
 
     function setRule(
-        bool _limited,
-        address _uniswapPair,
         uint256 _maxHoldingAmount,
         uint256 _maxTxAmount
     ) external onlyOwner {
-        limited = _limited;
-        uniswapPair = _uniswapPair;
         maxHoldingAmount = _maxHoldingAmount;
         maxTxAmount = _maxTxAmount;
     }
@@ -39,12 +30,7 @@ contract SHIA is ERC20, Ownable {
     ) internal virtual override {
         require(!blacklists[to] && !blacklists[from], "Blacklisted");
 
-        if (uniswapPair == address(0)) {
-            require(from == owner() || to == owner(), "trading is not started");
-            return;
-        }
-
-        if (limited && from == uniswapPair) {
+        if (from != owner() && to != owner()) {
             require(super.balanceOf(to) + amount <= maxHoldingAmount, "Forbid");
         }
 
