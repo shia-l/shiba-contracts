@@ -17,7 +17,7 @@ contract SHIA is ERC20, Ownable {
             10000000000 * 10 ** decimals()
         );
         maxTxAmount = 1000000 * 10 ** decimals();
-        maxHoldingAmount = 50000000  * 10 ** decimals();
+        maxHoldingAmount = 50000000 * 10 ** decimals();
     }
 
     function setRule(
