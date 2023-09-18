@@ -26,12 +26,12 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 This project and everyone participating in it is governed by the
 [Shiba Saga Code of Conduct](https://github.com/SHIBA-SAGA/blob/main/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behaviour
-to <>.
+to https://t.me/ShibaSaga.
 
 
 ## I Have a Question
 
-> If you want to ask a question, we assume that you have read the available [Documentation]().
+> If you want to ask a question, we assume that you have read the available [Documentation](https://www.shibasaga.com/files/woofpaper.pdf).
 
 Before you ask a question, it is best to search for existing [Issues](https://github.com/SHIBA-SAGA/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
 
