@@ -9,8 +9,8 @@ import "./Crowdsale.sol";
  * @dev Crowdsale accepting contributions only within a time frame.
  */
 abstract contract TimedCrowdsale is Crowdsale {
-	uint256 public _openingTime;
-	uint256 public _closingTime;
+	uint256 public immutable _openingTime;
+	uint256 public immutable _closingTime;
 
 	/**
 	 * Event for crowdsale extending
@@ -36,19 +36,19 @@ abstract contract TimedCrowdsale is Crowdsale {
 	 * @param closingTime Crowdsale closing time
 	 */
 	constructor(uint256 openingTime, uint256 closingTime) {
-		// solhint-disable-next-line not-rely-on-time
-		require(
-			openingTime >= block.timestamp,
-			"TimedCrowdsale: opening time is before current time"
-		);
-		// solhint-disable-next-line max-line-length
-		require(
-			closingTime > openingTime,
-			"TimedCrowdsale: opening time is not before closing time"
-		);
-
-		_openingTime = openingTime;
-		_closingTime = closingTime;
+	    // solhint-disable-next-line not-rely-on-time
+	    require(
+		openingTime >= block.timestamp,
+		"TimedCrowdsale: opening time is before current time"
+	    );
+	    // solhint-disable-next-line max-line-length
+	    require(
+		closingTime > openingTime,
+		"TimedCrowdsale: opening time is not before closing time"
+	    );
+	
+	    _openingTime = openingTime;
+	    _closingTime = closingTime;
 	}
 
 
