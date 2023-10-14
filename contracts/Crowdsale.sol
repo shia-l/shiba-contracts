@@ -270,11 +270,13 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 	 * @dev Determines how ETH is stored/forwarded on purchases.
 	 */
 	function _forwardFunds(uint256 usdtAmount) internal {
-		// conver usdtAmount to kwei because usdt is 6 decimals
-		uint256 kweiAmount = usdtAmount / 10 ** 12;
-		
-		require(_wallet != address(0), "SHIACrowdsale: wallet is the zero address");
-        require(_usdt.balanceOf(msg.sender) >= kweiAmount, "SHIACrowdsale: insufficient USDT balance");
-        SafeERC20.safeTransferFrom(_usdt, msg.sender, _wallet, kweiAmount);
+		uint8 decimals = _usdt.decimals();
+        	require(decimals <= 18, "Crowdsale: Token decimals exceed 18");  // This is to ensure no overflow happens when using `10 ** decimals`
+
+        	uint256 adjustedAmount = usdtAmount / (10 ** (18 - decimals));
+
+        	require(_wallet != address(0), "SHIACrowdsale: wallet is the zero address");
+        	require(_usdt.balanceOf(msg.sender) >= adjustedAmount, "SHIACrowdsale: insufficient USDT balance");
+        	SafeERC20.safeTransferFrom(_usdt, msg.sender, _wallet, adjustedAmount);
 	}
 }
