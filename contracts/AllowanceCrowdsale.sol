@@ -14,7 +14,7 @@ import "./Crowdsale.sol";
 abstract contract AllowanceCrowdsale is Crowdsale {
 	using SafeERC20 for IERC20;
 
-	address public _tokenWallet;
+	address public immutable _tokenWallet;
 
 	/**
 	 * @dev Constructor, takes token wallet address.
