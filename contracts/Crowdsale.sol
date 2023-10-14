@@ -30,10 +30,10 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 	IERC20 public _usdt;
 
 	// Maximum investment per investor (in USDT)
-    uint256 public _maxInvestment;
+    	uint256 public _maxInvestment;
 
-    // Minimum investment per investor (in USDT)
-    uint256 public _minInvestment;
+   	 // Minimum investment per investor (in USDT)
+    	uint256 public _minInvestment;
 
 	// Address where funds are collected
 	address payable public _wallet;
@@ -76,7 +76,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 		IERC20 usdt,
 
 		uint256 maxInvestment,
-        uint256 minInvestment
+        	uint256 minInvestment
 	) {
 		require(rate > 0, "Crowdsale: rate is 0");
 		require(wallet != address(0), "Crowdsale: wallet is the zero address");
@@ -84,15 +84,16 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 			address(token) != address(0),
 			"Crowdsale: token is the zero address"
 		);
+		require(address(usdt) != address(0), "Crowdsale: usdt is the zero address"); // Validation for usdt
 		require(maxInvestment > 0, "SHIACrowdsale: max investment is 0");
-        require(minInvestment > 0, "SHIACrowdsale: min investment is 0");
+        	require(minInvestment > 0, "SHIACrowdsale: min investment is 0");
 
 		_rate = rate;
 		_wallet = wallet;
 		_token = token;
 		_usdt = usdt;
 		_maxInvestment = maxInvestment;
-        _minInvestment = minInvestment;
+        	_minInvestment = minInvestment;
 	}
 
 
@@ -135,7 +136,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 	 * @param newWallet New wallet
 	 */
 	function updateWallet(address payable newWallet) public onlyOwner nonReentrant  {
-		// update rate
+		require(newWallet != address(0), "Crowdsale: new wallet is the zero address"); // Validation for newWallet
 		_wallet = newWallet;
 	}
 	
