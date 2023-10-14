@@ -5,7 +5,6 @@ import "./implementations/FullVesting.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract VestingPoolFactory is Ownable {
-    using SafeMath for uint256;
 
     address[] public vestingPools;
 
